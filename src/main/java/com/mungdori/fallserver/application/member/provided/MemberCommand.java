@@ -1,0 +1,15 @@
+package com.mungdori.fallserver.application.member.provided;
+
+
+import com.mungdori.fallserver.domain.member.Member;
+import com.mungdori.fallserver.domain.member.MemberRegisterRequest;
+
+/**
+ * 회원의 등록과 관련된 기능을 제공한다
+ */
+public interface MemberCommand {
+    Member register(MemberRegisterRequest registerRequest);
+
+
+    void updateCode(Long id, String code);
+}
