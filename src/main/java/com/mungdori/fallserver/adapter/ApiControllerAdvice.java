@@ -1,5 +1,6 @@
 package com.mungdori.fallserver.adapter;
 
+import com.mungdori.fallserver.adapter.exception.AuthException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -10,6 +11,11 @@ import java.time.LocalDateTime;
 
 @ControllerAdvice
 public class ApiControllerAdvice extends ResponseEntityExceptionHandler {
+
+    @ExceptionHandler(AuthException.class)
+    public ProblemDetail handleAuthException(AuthException exception) {
+        return ProblemDetail.forStatusAndDetail(exception.getStatus(), exception.getMessage());
+    }
 
     @ExceptionHandler(Exception.class)
     public ProblemDetail handleException(Exception exception) {

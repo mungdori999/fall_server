@@ -1,0 +1,11 @@
+spring:
+  application.name: fallServer
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+jwt:
+  secret: "1231231safesabdsabfqerb2424brbafdba3qbfdbfdbafdbaaaaavfv"
+  expires-in: 2592000
