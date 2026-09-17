@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.List;
+
 @Service
 @Transactional
 @Validated
@@ -18,6 +20,17 @@ public class MemberModifyService implements MemberCommand {
 
     private final MemberFinder memberFinder;
     private final MemberRepository memberRepository;
+
+    @Override
+    public List<Member> getMemberList() {
+        return memberFinder.findAll();
+    }
+
+    @Override
+    public Member getMember(Long id) {
+        return memberFinder.find(id);
+
+    }
 
     @Override
     public Member register(MemberRegisterRequest registerRequest) {

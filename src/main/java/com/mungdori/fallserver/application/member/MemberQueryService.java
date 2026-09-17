@@ -9,12 +9,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.List;
+
 @Service
 @Transactional
 @Validated
 @RequiredArgsConstructor
 public class MemberQueryService implements MemberFinder {
     private final MemberRepository memberRepository;
+
+    @Override
+    public List<Member> findAll() {
+        return memberRepository.findAll();
+
+    }
 
     @Override
     public Member find(Long memberId) {

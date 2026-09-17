@@ -9,3 +9,6 @@ spring:
 jwt:
   secret: "1231231safesabdsabfqerb2424brbafdba3qbfdbfdbafdbaaaaavfv"
   expires-in: 2592000
+
+app:
+  frontend-url: http://localhost:5173

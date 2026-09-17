@@ -9,6 +9,7 @@ import com.mungdori.fallserver.domain.admin.PasswordEncoder;
 import com.mungdori.fallserver.domain.auth.AdminLogin;
 import com.mungdori.fallserver.domain.auth.MemberLogin;
 import com.mungdori.fallserver.domain.auth.Role;
+import com.mungdori.fallserver.domain.member.Member;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.CacheControl;
@@ -27,7 +28,8 @@ public class LoginApi {
 
     @PostMapping({"/api/member/login", "/api/members/login"})
     public ResponseEntity<TokenResponse> member(@Valid @RequestBody MemberLogin request) {
-        if (!members.existsByCode(request.code())) throw AuthException.unauthorized();
+        Member member = members.findByName(request.name()).orElseThrow(AuthException::unauthorized);
+        if (!member.verifyCode(request.code())) throw AuthException.unauthorized();
         return response(Role.MEMBER);
     }
 
