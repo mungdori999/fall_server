@@ -20,6 +20,7 @@ public class MemberModifyService implements MemberCommand {
 
     private final MemberFinder memberFinder;
     private final MemberRepository memberRepository;
+    private final MemberCommand memberCommand;
 
     @Override
     public List<Member> getMemberList() {
@@ -49,6 +50,13 @@ public class MemberModifyService implements MemberCommand {
         member = member.updateCode(code);
 
         memberRepository.save(member);
+    }
+
+    @Override
+    public void delete(Long id) {
+        Member member = memberFinder.find(id);
+
+        memberRepository.delete(member);
     }
 
 }

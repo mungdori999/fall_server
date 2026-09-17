@@ -74,10 +74,22 @@ public class AdminApi {
      * @param id
      */
     @AdminOnly
-    @PutMapping("/code/{id}")
+    @PutMapping("/member/code/{id}")
     public void changeCode(@RequestParam("code") String code,
                            @PathVariable Long id) {
         memberCommand.updateCode(id, code);
     }
+
+    /**
+     * 멤버 삭제
+     * @param id
+     */
+    @AdminOnly
+    @DeleteMapping("/member/{id}")
+    public void deleteMember(@PathVariable Long id) {
+        memberCommand.delete(id);
+    }
+
+
 
 }

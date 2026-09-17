@@ -29,10 +29,11 @@ public class MemberDetail {
     private Member member;
 
 
-    static MemberDetail create() {
-        MemberDetail memberDetail = new MemberDetail();
-        memberDetail.registeredAt = LocalDateTime.now();
-        return memberDetail;
+    static MemberDetail create(Member member) {
+        MemberDetail detail = new MemberDetail();
+        detail.member = java.util.Objects.requireNonNull(member);
+        detail.registeredAt = LocalDateTime.now();
+        return detail;
     }
 
 }

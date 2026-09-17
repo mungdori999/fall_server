@@ -18,4 +18,6 @@ public interface MemberCommand {
 
 
     void updateCode(Long id, String code);
+
+    void delete(Long id);
 }

@@ -1,6 +1,5 @@
 package com.mungdori.fallserver.domain.member;
 
-import com.mungdori.fallserver.domain.admin.PasswordEncoder;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -36,7 +35,7 @@ public class Member {
         member.gender = requireNonNull(createRequest.gender());
         member.code = requireNonNull(createRequest.code());
 
-        member.detail = MemberDetail.create();
+        member.detail = MemberDetail.create(member);
 
         return member;
     }
