@@ -10,6 +10,7 @@ import com.mungdori.fallserver.domain.admin.Admin;
 import com.mungdori.fallserver.domain.admin.AdminRegisterRequest;
 import com.mungdori.fallserver.domain.member.Member;
 import com.mungdori.fallserver.domain.member.MemberRegisterRequest;
+import com.mungdori.fallserver.domain.member.MemberUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -68,16 +69,16 @@ public class AdminApi {
     }
 
     /**
-     * Code 수정
+     * 멤버 정보 수정
      *
-     * @param code
+     * @param request
      * @param id
      */
     @AdminOnly
-    @PutMapping("/member/code/{id}")
-    public void changeCode(@RequestParam("code") String code,
+    @PutMapping("/member/{id}")
+    public void changeCode(@RequestBody MemberUpdateRequest request,
                            @PathVariable Long id) {
-        memberCommand.updateCode(id, code);
+        memberCommand.updateCode(id, request);
     }
 
     /**

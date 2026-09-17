@@ -5,6 +5,7 @@ import com.mungdori.fallserver.application.member.provided.MemberCommand;
 import com.mungdori.fallserver.application.member.required.MemberRepository;
 import com.mungdori.fallserver.domain.member.Member;
 import com.mungdori.fallserver.domain.member.MemberRegisterRequest;
+import com.mungdori.fallserver.domain.member.MemberUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +21,7 @@ public class MemberModifyService implements MemberCommand {
 
     private final MemberFinder memberFinder;
     private final MemberRepository memberRepository;
-    private final MemberCommand memberCommand;
+
 
     @Override
     public List<Member> getMemberList() {
@@ -44,10 +45,10 @@ public class MemberModifyService implements MemberCommand {
     }
 
     @Override
-    public void updateCode(Long id, String code) {
+    public void updateCode(Long id, MemberUpdateRequest request) {
         Member member = memberFinder.find(id);
 
-        member = member.updateCode(code);
+        member = member.updateCode(request);
 
         memberRepository.save(member);
     }

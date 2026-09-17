@@ -40,8 +40,11 @@ public class Member {
         return member;
     }
 
-    public Member updateCode(String code) {
-        this.code = requireNonNull(code);
+    public Member updateCode(MemberUpdateRequest updateRequest) {
+        this.code = requireNonNull(updateRequest.code());
+        this.name = requireNonNull(updateRequest.name());
+        this.gender = requireNonNull(updateRequest.gender());
+
         return this;
     }
 

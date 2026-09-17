@@ -3,6 +3,7 @@ package com.mungdori.fallserver.application.member.provided;
 
 import com.mungdori.fallserver.domain.member.Member;
 import com.mungdori.fallserver.domain.member.MemberRegisterRequest;
+import com.mungdori.fallserver.domain.member.MemberUpdateRequest;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ public interface MemberCommand {
     Member register(MemberRegisterRequest registerRequest);
 
 
-    void updateCode(Long id, String code);
+    void updateCode(Long id, MemberUpdateRequest request);
 
     void delete(Long id);
 }
