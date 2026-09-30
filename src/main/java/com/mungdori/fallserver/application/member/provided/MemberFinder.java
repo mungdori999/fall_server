@@ -1,6 +1,7 @@
 package com.mungdori.fallserver.application.member.provided;
 
 
+import com.mungdori.fallserver.domain.member.Gender;
 import com.mungdori.fallserver.domain.member.Member;
 
 import java.util.List;
@@ -13,4 +14,5 @@ public interface MemberFinder {
     List<Member> findAll();
     Member find(Long memberId);
 
+    List<Member> findByGender(Gender gender);
 }

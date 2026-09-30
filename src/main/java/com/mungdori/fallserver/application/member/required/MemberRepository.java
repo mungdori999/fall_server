@@ -1,6 +1,7 @@
 package com.mungdori.fallserver.application.member.required;
 
 
+import com.mungdori.fallserver.domain.member.Gender;
 import com.mungdori.fallserver.domain.member.Member;
 import org.springframework.data.repository.Repository;
 
@@ -23,4 +24,6 @@ public interface MemberRepository extends Repository<Member, Long> {
 
 
     void delete(Member member);
+
+    List<Member> findAllByGender(Gender gender);
 }

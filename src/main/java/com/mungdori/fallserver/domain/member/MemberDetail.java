@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+import static java.util.Objects.*;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -29,9 +31,9 @@ public class MemberDetail {
     private Member member;
 
 
-    static MemberDetail create(Member member) {
+    protected static MemberDetail create(Member member) {
         MemberDetail detail = new MemberDetail();
-        detail.member = java.util.Objects.requireNonNull(member);
+        detail.member = requireNonNull(member);
         detail.registeredAt = LocalDateTime.now();
         return detail;
     }

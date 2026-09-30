@@ -3,6 +3,7 @@ package com.mungdori.fallserver.application.member;
 
 import com.mungdori.fallserver.application.member.provided.MemberFinder;
 import com.mungdori.fallserver.application.member.required.MemberRepository;
+import com.mungdori.fallserver.domain.member.Gender;
 import com.mungdori.fallserver.domain.member.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,12 +22,16 @@ public class MemberQueryService implements MemberFinder {
     @Override
     public List<Member> findAll() {
         return memberRepository.findAll();
-
     }
 
     @Override
     public Member find(Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("회원을 찾을 수 없습니다." + memberId));
+    }
+
+    @Override
+    public List<Member> findByGender(Gender gender) {
+        return memberRepository.findAllByGender(gender);
     }
 }

@@ -23,6 +23,7 @@ public class Member {
     private Gender gender;
 
     private String code;
+    private int messageCnt;
 
 
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -34,10 +35,17 @@ public class Member {
         member.name = requireNonNull(createRequest.name());
         member.gender = requireNonNull(createRequest.gender());
         member.code = requireNonNull(createRequest.code());
-
+        member.messageCnt = 3;
         member.detail = MemberDetail.create(member);
 
         return member;
+    }
+
+    public void useMessageChance() {
+        this.messageCnt--;
+        if (this.messageCnt < 0) {
+            throw new IllegalStateException();
+        }
     }
 
     public Member updateCode(MemberUpdateRequest updateRequest) {

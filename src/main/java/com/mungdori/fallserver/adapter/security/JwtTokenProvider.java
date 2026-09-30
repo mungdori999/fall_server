@@ -2,7 +2,9 @@ package com.mungdori.fallserver.adapter.security;
 
 import com.mungdori.fallserver.adapter.exception.AuthException;
 import com.mungdori.fallserver.adapter.webapi.dto.TokenResponse;
+import com.mungdori.fallserver.domain.admin.Admin;
 import com.mungdori.fallserver.domain.auth.Role;
+import com.mungdori.fallserver.domain.member.Member;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -32,9 +34,21 @@ public class JwtTokenProvider {
         }
     }
 
-    public TokenResponse issue(Role role) {
+    public TokenResponse issueMember(Member member) {
         Instant now = Instant.now();
-        String token = Jwts.builder().claim("role", role.name())
+        String token = Jwts.builder().claim("role", Role.MEMBER)
+                .claim("id", member.getId())
+                .claim("name", member.getName())
+                .issuedAt(Date.from(now)).expiration(Date.from(now.plusSeconds(expiresIn)))
+                .signWith(key, Jwts.SIG.HS256).compact();
+        return new TokenResponse(token, "Bearer", expiresIn);
+    }
+
+    public TokenResponse issueAdmin(Admin admin) {
+        Instant now = Instant.now();
+        String token = Jwts.builder().claim("role", Role.ADMIN)
+                .claim("id", admin.getId())
+                .claim("name", admin.getName())
                 .issuedAt(Date.from(now)).expiration(Date.from(now.plusSeconds(expiresIn)))
                 .signWith(key, Jwts.SIG.HS256).compact();
         return new TokenResponse(token, "Bearer", expiresIn);
@@ -42,11 +56,23 @@ public class JwtTokenProvider {
 
     public Role getRole(String token) {
         try {
+            return getAuthMember(token).role();
+        } catch (JwtException | IllegalArgumentException e) {
+            throw AuthException.unauthorized();
+        }
+    }
+
+    public AuthMember getAuthMember(String token) {
+        try {
             var claims = Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload();
             if (claims.getExpiration() == null) throw AuthException.unauthorized();
+
+            Long id = claims.get("id", Long.class);
+            String name = claims.get("name", String.class);
             String role = claims.get("role", String.class);
-            if (role == null) throw AuthException.unauthorized();
-            return Role.valueOf(role);
+            if (id == null || name == null || role == null) throw AuthException.unauthorized();
+
+            return new AuthMember(id, name, Role.valueOf(role));
         } catch (JwtException | IllegalArgumentException e) {
             throw AuthException.unauthorized();
         }

@@ -14,6 +14,7 @@ public interface MemberCommand {
 
     List<Member> getMemberList();
     Member getMember(Long id);
+    List<Member> getMemberListByGender(Long id);
 
     Member register(MemberRegisterRequest registerRequest);
 
@@ -21,4 +22,5 @@ public interface MemberCommand {
     void updateCode(Long id, MemberUpdateRequest request);
 
     void delete(Long id);
+
 }

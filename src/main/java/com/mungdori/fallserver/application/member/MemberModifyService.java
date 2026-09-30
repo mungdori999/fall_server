@@ -3,6 +3,7 @@ package com.mungdori.fallserver.application.member;
 import com.mungdori.fallserver.application.member.provided.MemberFinder;
 import com.mungdori.fallserver.application.member.provided.MemberCommand;
 import com.mungdori.fallserver.application.member.required.MemberRepository;
+import com.mungdori.fallserver.domain.member.Gender;
 import com.mungdori.fallserver.domain.member.Member;
 import com.mungdori.fallserver.domain.member.MemberRegisterRequest;
 import com.mungdori.fallserver.domain.member.MemberUpdateRequest;
@@ -32,6 +33,21 @@ public class MemberModifyService implements MemberCommand {
     public Member getMember(Long id) {
         return memberFinder.find(id);
 
+    }
+
+    @Override
+    public List<Member> getMemberListByGender(Long id) {
+        Member member = memberFinder.find(id);
+
+        Gender serachGender;
+        // 내가 남자면 여자를 조회 여자면 남자를 조회
+        if (member.getGender().equals(Gender.MALE)) {
+            serachGender = Gender.FEMALE;
+        } else {
+            serachGender = Gender.MALE;
+        }
+
+        return memberFinder.findByGender(serachGender);
     }
 
     @Override
