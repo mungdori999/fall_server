@@ -61,6 +61,21 @@ public class MemberModifyService implements MemberCommand {
     }
 
     @Override
+    public int registerAll(List<MemberRegisterRequest> registerRequests) {
+        for (MemberRegisterRequest request : registerRequests) {
+            if (memberRepository.existsByCode(request.code())) {
+                throw new IllegalArgumentException("이미 등록된 참가 코드가 있습니다: " + request.code());
+            }
+        }
+
+        for (MemberRegisterRequest request : registerRequests) {
+            memberRepository.save(Member.register(request));
+        }
+
+        return registerRequests.size();
+    }
+
+    @Override
     public void updateCode(Long id, MemberUpdateRequest request) {
         Member member = memberFinder.find(id);
 

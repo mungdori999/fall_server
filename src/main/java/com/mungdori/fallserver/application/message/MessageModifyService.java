@@ -4,6 +4,7 @@ import com.mungdori.fallserver.application.member.provided.MemberFinder;
 import com.mungdori.fallserver.application.message.provided.MessageCommand;
 import com.mungdori.fallserver.application.message.provided.MessageFinder;
 import com.mungdori.fallserver.application.message.required.MessageRepository;
+import com.mungdori.fallserver.application.message.exception.MessageAlreadySentException;
 import com.mungdori.fallserver.domain.member.Member;
 import com.mungdori.fallserver.domain.message.Message;
 import com.mungdori.fallserver.domain.message.MessageRequest;
@@ -40,6 +41,10 @@ public class MessageModifyService implements MessageCommand {
 
         if (sender.getId().equals(receiver.getId()) || sender.getGender() == receiver.getGender()) {
             throw new IllegalArgumentException("반대 성별 참가자에게만 쪽지를 보낼 수 있습니다.");
+        }
+
+        if (messageRepository.existsBySenderMemberIdAndReceiverMemberId(sender.getId(), receiver.getId())) {
+            throw new MessageAlreadySentException();
         }
 
         sender.useMessageChance();

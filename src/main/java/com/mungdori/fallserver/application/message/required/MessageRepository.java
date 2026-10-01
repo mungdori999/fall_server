@@ -14,4 +14,6 @@ public interface MessageRepository extends Repository<Message, Long> {
     List<Message> findAllBySenderMemberId(Long senderMemberId);
 
     List<Message> findAllByReceiverMemberId(Long receiverMemberId);
+
+    boolean existsBySenderMemberIdAndReceiverMemberId(Long senderMemberId, Long receiverMemberId);
 }

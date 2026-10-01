@@ -1,6 +1,7 @@
 package com.mungdori.fallserver.adapter;
 
 import com.mungdori.fallserver.adapter.exception.AuthException;
+import com.mungdori.fallserver.application.message.exception.MessageAlreadySentException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -15,6 +16,16 @@ public class ApiControllerAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler(AuthException.class)
     public ProblemDetail handleAuthException(AuthException exception) {
         return ProblemDetail.forStatusAndDetail(exception.getStatus(), exception.getMessage());
+    }
+
+    @ExceptionHandler(MessageAlreadySentException.class)
+    public ProblemDetail handleMessageAlreadySentException(MessageAlreadySentException exception) {
+        return getProblemDetail(HttpStatus.CONFLICT, exception);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ProblemDetail handleIllegalArgumentException(IllegalArgumentException exception) {
+        return getProblemDetail(HttpStatus.BAD_REQUEST, exception);
     }
 
     @ExceptionHandler(Exception.class)

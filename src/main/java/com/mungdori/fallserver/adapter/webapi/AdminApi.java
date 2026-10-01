@@ -3,8 +3,11 @@ package com.mungdori.fallserver.adapter.webapi;
 import com.mungdori.fallserver.adapter.security.AdminOnly;
 import com.mungdori.fallserver.adapter.webapi.dto.AdminRegisterResponse;
 import com.mungdori.fallserver.adapter.webapi.dto.MemberRegisterResponse;
+import com.mungdori.fallserver.adapter.webapi.dto.MemberBulkRegisterResponse;
 import com.mungdori.fallserver.adapter.webapi.dto.MemberResponse;
 import com.mungdori.fallserver.application.admin.provided.AdminCommand;
+import com.mungdori.fallserver.application.admin.provided.MemberExcelParser;
+import com.mungdori.fallserver.application.admin.provided.MemberExcelTemplateGenerator;
 import com.mungdori.fallserver.application.member.provided.MemberCommand;
 import com.mungdori.fallserver.domain.admin.Admin;
 import com.mungdori.fallserver.domain.admin.AdminRegisterRequest;
@@ -14,9 +17,12 @@ import com.mungdori.fallserver.domain.member.MemberUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.io.IOException;
 
 
 @RestController
@@ -26,6 +32,8 @@ public class AdminApi {
 
     private final MemberCommand memberCommand;
     private final AdminCommand adminCommand;
+    private final MemberExcelParser memberExcelParser;
+    private final MemberExcelTemplateGenerator memberExcelTemplateGenerator;
 
 
     /**
@@ -66,6 +74,33 @@ public class AdminApi {
         Member member = memberCommand.register(request);
 
         return MemberRegisterResponse.of(member);
+    }
+
+    @AdminOnly
+    @PostMapping(value = "/member/bulk", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<MemberBulkRegisterResponse> registerMembersFromExcel(
+            @RequestPart("file") MultipartFile file
+    ) {
+        String filename = file.getOriginalFilename();
+        if (file.isEmpty() || filename == null || !filename.toLowerCase().endsWith(".xlsx")) {
+            throw new IllegalArgumentException(".xlsx 파일만 업로드할 수 있습니다.");
+        }
+
+        try {
+            int registeredCount = memberCommand.registerAll(memberExcelParser.parse(file.getInputStream()));
+            return ResponseEntity.status(HttpStatus.CREATED).body(new MemberBulkRegisterResponse(registeredCount));
+        } catch (IOException exception) {
+            throw new IllegalArgumentException("업로드 파일을 읽을 수 없습니다.", exception);
+        }
+    }
+
+    @AdminOnly
+    @GetMapping("/member/template")
+    public ResponseEntity<byte[]> downloadMemberExcelTemplate() {
+        return ResponseEntity.ok()
+                .header("Content-Disposition", "attachment; filename=member-import-template.xlsx")
+                .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .body(memberExcelTemplateGenerator.generate());
     }
 
     /**

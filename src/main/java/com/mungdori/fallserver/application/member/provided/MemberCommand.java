@@ -18,6 +18,8 @@ public interface MemberCommand {
 
     Member register(MemberRegisterRequest registerRequest);
 
+    int registerAll(List<MemberRegisterRequest> registerRequests);
+
 
     void updateCode(Long id, MemberUpdateRequest request);
 
