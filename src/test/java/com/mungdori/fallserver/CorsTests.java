@@ -16,7 +16,7 @@ class CorsTests {
     @Autowired MockMvc mvc;
 
     @Test void allowsFrontendPreflight() throws Exception {
-        mvc.perform(options("/api/member/login")
+        mvc.perform(options("/api/login/member")
                 .header("Origin", "http://localhost:5173")
                 .header("Access-Control-Request-Method", "POST")
                 .header("Access-Control-Request-Headers", "content-type,authorization"))
@@ -26,7 +26,7 @@ class CorsTests {
     }
 
     @Test void rejectsOtherOrigins() throws Exception {
-        mvc.perform(options("/api/member/login")
+        mvc.perform(options("/api/login/member")
                 .header("Origin", "http://localhost:9999")
                 .header("Access-Control-Request-Method", "POST"))
                 .andExpect(status().isForbidden())
@@ -34,7 +34,7 @@ class CorsTests {
     }
 
     @Test void includesCorsHeadersOnValidationErrors() throws Exception {
-        mvc.perform(post("/api/member/login")
+        mvc.perform(post("/api/login/member")
                 .header("Origin", "http://localhost:5173")
                 .contentType("application/json").content("{\"code\":\"\"}"))
                 .andExpect(status().isBadRequest())
