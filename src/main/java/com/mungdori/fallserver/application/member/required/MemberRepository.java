@@ -14,8 +14,6 @@ import java.util.Optional;
 public interface MemberRepository extends Repository<Member, Long> {
     Member save(Member member);
 
-    boolean existsByCode(String code);
-
     Optional<Member> findById(Long memberId);
 
     Optional<Member> findByName(String name);
