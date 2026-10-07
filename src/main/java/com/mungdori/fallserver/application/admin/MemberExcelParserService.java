@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -36,7 +35,6 @@ public class MemberExcelParserService implements MemberExcelParser {
             DataFormatter formatter = new DataFormatter();
             Map<String, Integer> columns = headerColumns(sheet.getRow(sheet.getFirstRowNum()), formatter);
             List<MemberRegisterRequest> requests = new ArrayList<>();
-            Set<String> codes = new HashSet<>();
 
             for (int rowIndex = sheet.getFirstRowNum() + 1; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
                 Row row = sheet.getRow(rowIndex);
@@ -49,8 +47,6 @@ public class MemberExcelParserService implements MemberExcelParser {
 
                 if (name.isBlank()) throw new IllegalArgumentException(displayRow + "행의 이름이 비어 있습니다.");
                 if (!code.matches("\\d{6}")) throw new IllegalArgumentException(displayRow + "행의 코드는 숫자 6자리여야 합니다.");
-                if (!codes.add(code)) throw new IllegalArgumentException("업로드 파일에 중복된 코드가 있습니다: " + code);
-
                 requests.add(new MemberRegisterRequest(name, toGender(genderValue, displayRow), code));
             }
 
